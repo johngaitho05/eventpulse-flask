@@ -28,3 +28,4 @@ class Event(BaseModel, Base):
     attendees = relationship("User", secondary=event_attendees,
                              viewonly=False)
     tracks = relationship("EventTrack", backref="event", cascade="all, delete, delete-orphan")
+    banner_url = Column(String(2048))
