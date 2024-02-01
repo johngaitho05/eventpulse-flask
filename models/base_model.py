@@ -2,16 +2,17 @@
 """
 Contains class BaseModel
 """
-
+import hashlib
 import uuid
-from datetime import datetime
+from datetime import datetime, date
 
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 import models
 
-time = "%Y-%m-%dT%H:%M:%S.%f"
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 Base = declarative_base()
 
@@ -22,26 +23,29 @@ class BaseModel:
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
+    @staticmethod
+    def _refined_kwargs(kwargs):
+        """Format the parameters for use when creating or updating a record"""
+        special_keys = ['__class__', '_sa_instance_stat']
+        kwargs = {k: v for k, v in kwargs.items() if k not in special_keys}
+        if 'password' in kwargs:
+            kwargs['password'] = hashlib.md5(kwargs['password'].encode('utf-8')).hexdigest().lower()
+        if not kwargs.get('id'):
+            kwargs['id'] = str(uuid.uuid4())
+        if not kwargs.get('created_at'):
+            kwargs['created_at'] = datetime.utcnow()
+        if not kwargs.get('updated_at'):
+            kwargs['updated_at'] = datetime.utcnow()
+        if type(kwargs['created_at']) is str:
+            kwargs['created_at'] = datetime.strptime(kwargs["created_at"], DATETIME_FORMAT)
+        if type(kwargs['updated_at']) is str:
+            kwargs['updated_at'] = datetime.strptime(kwargs["updated_at"], DATETIME_FORMAT)
+
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
-        if kwargs:
-            for key, value in kwargs.items():
-                if key != "__class__":
-                    setattr(self, key, value)
-            if kwargs.get("created_at", None) and type(self.created_at) is str:
-                self.created_at = datetime.strptime(kwargs["created_at"], time)
-            else:
-                self.created_at = datetime.utcnow()
-            if kwargs.get("updated_at", None) and type(self.updated_at) is str:
-                self.updated_at = datetime.strptime(kwargs["updated_at"], time)
-            else:
-                self.updated_at = datetime.utcnow()
-            if kwargs.get("id", None) is None:
-                self.id = str(uuid.uuid4())
-        else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = self.created_at
+        kwargs = self._refined_kwargs(kwargs)
+        for k, v in kwargs:
+            setattr(self, k, v)
 
     def __str__(self):
         """String representation of the BaseModel class"""
@@ -54,21 +58,26 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-    def to_dict(self, save_fs=None):
+    def to_dict(self, anotate=None):
         """returns a dictionary containing all keys/values of the instance"""
-        new_dict = self.__dict__.copy()
-        if "created_at" in new_dict:
-            new_dict["created_at"] = new_dict["created_at"].strftime(time)
-        if "updated_at" in new_dict:
-            new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
-        new_dict["__class__"] = self.__class__.__name__
-        if "_sa_instance_state" in new_dict:
-            del new_dict["_sa_instance_state"]
-        if save_fs is None:
-            if "password" in new_dict:
-                del new_dict["password"]
-        return new_dict
+        special_keys = ['__class__', '_sa_instance_stat', 'password']
+        res = self.__dict__.copy()
+        for k, v in res.items():
+            if type(res[k]) is datetime:
+                res[k] = res[k].strftime(DATETIME_FORMAT)
+            elif type(res[k]) is date:
+                res[k] = res[k].strftime(DATE_FORMAT)
+
+        return {k: v for k, v in res if k not in special_keys}
 
     def delete(self):
         """delete the current instance from the storage"""
         models.storage.delete(self)
+
+    def update(self, kwargs):
+        """Update the current record"""
+        to_ignore = ['id', 'created_at', 'updated_at']
+        kwargs = self._refined_kwargs({k: v for k, v in kwargs.items() if k not in to_ignore})
+        for k, v in kwargs:
+            setattr(self, k, v)
+        self.save()

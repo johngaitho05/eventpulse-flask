@@ -4,6 +4,7 @@ from sqlalchemy import Column, String, ForeignKey, Table, DateTime
 from sqlalchemy.orm import relationship
 
 from models.base_model import Base, BaseModel
+from models.venue import Venue
 
 event_attendees = Table('event_attendees', Base.metadata,
                         Column('event_id', String(60),
@@ -25,7 +26,14 @@ class Event(BaseModel, Base):
     venue_id = Column(String(60), ForeignKey('venues.id'), nullable=False)
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
-    attendees = relationship("User", secondary=event_attendees,
-                             viewonly=False)
+    banner_url = Column(String(2048), nullable=False)
+    attendees = relationship("User", secondary=event_attendees, viewonly=False)
     tracks = relationship("EventTrack", backref="event", cascade="all, delete, delete-orphan")
-    banner_url = Column(String(2048))
+
+    def to_dict(self, anotate=None):
+        """Attach ManyToOne records"""
+        from models import storage
+        res = super(Event, self).to_dict()
+        if anotate and 'venue_id' in anotate:
+            res.update({'venue_id': storage.get(Venue, self.venue_id).to_dict()})
+        return res

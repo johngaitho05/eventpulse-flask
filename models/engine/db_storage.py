@@ -3,11 +3,12 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+
+import models
 from models.base_model import Base
 from models.country import Country
 from models.event import Event
 from models.event_track import EventTrack
-from models.room import Room
 from models.venue import Venue
 from models.user import User
 from os import getenv
@@ -18,7 +19,6 @@ classes = {
     "Country": Country,
     "Event": Event,
     "EventTrack": EventTrack,
-    "Room": Room,
     "Venue": Venue,
 }
 
@@ -62,6 +62,22 @@ class DBStorage:
                 dct[key] = obj
         return dct
 
+    @staticmethod
+    def _matches(obj, kwargs):
+        """Check if a record matches the filter query"""
+        for k, v in kwargs.items():
+            if '__' in k:
+                x, y = k.split('__')[:2]
+                if obj[x][y] != v:
+                    return False
+            elif obj[k] != v:
+                return False
+        return True
+
+    def filter(self, cls, **kwargs):
+        """Filter records that matches the given vals"""
+        return {_id: obj for _id, obj in self.all(cls).items() if self._matches(obj, kwargs)}
+
     def new(self, obj):
         """adds the obj to the current db session"""
         if obj is not None:
@@ -95,3 +111,18 @@ class DBStorage:
     def close(self):
         """closes the working SQLAlchemy session"""
         self.__session.close()
+
+    def count(self, cls=None):
+        """
+        count the number of objects in storage
+        """
+        all_class = classes.values()
+
+        if not cls:
+            count = 0
+            for clas in all_class:
+                count += len(models.storage.all(clas).values())
+        else:
+            count = len(models.storage.all(cls).values())
+
+        return count
