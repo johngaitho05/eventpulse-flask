@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ objects that handle all default RestFul API actions for Users """
+from flasgger import swag_from
 from flask import abort, jsonify, make_response, request
 
 from api.v1.views import app_views
@@ -8,26 +9,39 @@ from models.user import User
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/all_users.yml', methods=['GET'])
 def get_users():
     """
     Retrieves the list of all user objects
     """
     all_users = storage.all(User).values()
-    return jsonify([user.to_dict() for user in all_users])
+    return jsonify([user.to_dict(anotate=['country_id']) for user in all_users])
+
+
+@app_views.route('countries/<country_id>/users', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/country_users.yml', methods=['GET'])
+def get_country_users(country_id):
+    """
+    Retrieves the list of all user objects
+    """
+    users = storage.filter(User, country_id=country_id).values()
+    return jsonify([user.to_dict() for user in users])
 
 
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/get_user.yml', methods=['GET'])
 def get_user(user_id):
     """ Retrieves a single user """
     user = storage.get(User, user_id)
     if not user:
         abort(404)
 
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict(anotate=['country_id']))
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
+@swag_from('documentation/user/delete_user.yml', methods=['DELETE'])
 def delete_user(user_id):
     """
     Deletes a user Object
@@ -63,7 +77,7 @@ def post_user():
 
     instance = User(**data)
     instance.save()
-    return make_response(jsonify(instance.to_dict()), 201)
+    return make_response(jsonify(instance.to_dict(anotate=['country_id'])), 201)
 
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
@@ -84,4 +98,4 @@ def put_user(user_id):
         del data['email']
 
     user.update(**data)
-    return make_response(jsonify(user.to_dict()), 200)
+    return make_response(jsonify(user.to_dict(anotate=['country_id'])), 200)

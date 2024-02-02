@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Defines the Review class."""
-from sqlalchemy import Column, String, ForeignKey, Table, DateTime
+from sqlalchemy import Column, String, ForeignKey, Table, DateTime, Text
 from sqlalchemy.orm import relationship
 
 from models.base_model import Base, BaseModel
@@ -23,7 +23,9 @@ class Event(BaseModel, Base):
     __tablename__ = 'events'
 
     title = Column(String(1024), nullable=False)
+    description = Column(Text, nullable=False)
     venue_id = Column(String(60), ForeignKey('venues.id'), nullable=False)
+    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
     banner_url = Column(String(2048), nullable=False)

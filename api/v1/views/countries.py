@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" objects that handle all default RestFul API actions for Countrys """
+""" objects that handle all default RestFul API actions for Countries """
 from flask import abort, jsonify, make_response, request
 
 from api.v1.views import app_views
@@ -13,6 +13,7 @@ def get_countries():
     Retrieves all country objects
     """
     all_countries = storage.all(Country).values()
+    print("countries", [country.id for country in all_countries])
     return jsonify([country.to_dict() for country in all_countries])
 
 

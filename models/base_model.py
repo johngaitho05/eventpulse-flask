@@ -40,11 +40,12 @@ class BaseModel:
             kwargs['created_at'] = datetime.strptime(kwargs["created_at"], DATETIME_FORMAT)
         if type(kwargs['updated_at']) is str:
             kwargs['updated_at'] = datetime.strptime(kwargs["updated_at"], DATETIME_FORMAT)
+        return kwargs
 
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
         kwargs = self._refined_kwargs(kwargs)
-        for k, v in kwargs:
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
     def __str__(self):
@@ -60,7 +61,7 @@ class BaseModel:
 
     def to_dict(self, anotate=None):
         """returns a dictionary containing all keys/values of the instance"""
-        special_keys = ['__class__', '_sa_instance_stat', 'password']
+        special_keys = ['_sa_instance_state', '__class__', 'password']
         res = self.__dict__.copy()
         for k, v in res.items():
             if type(res[k]) is datetime:
@@ -68,7 +69,7 @@ class BaseModel:
             elif type(res[k]) is date:
                 res[k] = res[k].strftime(DATE_FORMAT)
 
-        return {k: v for k, v in res if k not in special_keys}
+        return {k: v for k, v in res.items() if k not in special_keys}
 
     def delete(self):
         """delete the current instance from the storage"""

@@ -2,7 +2,12 @@ retrieves a list of all users.
 ---
 tags:
   - Users
-
+parameters:
+  - name: country_id
+    in: path
+    type: string
+    required: true
+    description: The id of the country to retrieve users for
 responses:
   200:
     description: request executed successfully

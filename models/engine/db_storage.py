@@ -68,11 +68,12 @@ class DBStorage:
         for k, v in kwargs.items():
             if '__' in k:
                 x, y = k.split('__')[:2]
-                if obj[x][y] != v:
-                    return False
-            elif obj[k] != v:
-                return False
-        return True
+                obj = obj.to_dict(anotate=[x])
+                if obj[x][y] == v:
+                    return True
+            elif obj.to_dict()[k] == v:
+                return True
+        return False
 
     def filter(self, cls, **kwargs):
         """Filter records that matches the given vals"""
@@ -112,17 +113,11 @@ class DBStorage:
         """closes the working SQLAlchemy session"""
         self.__session.close()
 
+    def get(self, cls, id):
+        """Retrieves a record given a class and id"""
+        key = '{}.{}'.format(cls.__name__, id)
+        return self.all(cls).get(key, None)
+
     def count(self, cls=None):
-        """
-        count the number of objects in storage
-        """
-        all_class = classes.values()
-
-        if not cls:
-            count = 0
-            for clas in all_class:
-                count += len(models.storage.all(clas).values())
-        else:
-            count = len(models.storage.all(cls).values())
-
-        return count
+        """Count the number of records for a given class"""
+        return len(self.all(cls))

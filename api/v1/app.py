@@ -32,8 +32,8 @@ def not_found(error):
     return make_response(jsonify({'error': "Not found"}), 404)
 
 
-app.config['EVENTPULSE'] = {
-    'title': 'EventPulse Restful API',
+app.config['SWAGGER'] = {
+    'title': 'EventPulse API',
     'version': "1.0.0"
 }
 
