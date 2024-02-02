@@ -38,4 +38,6 @@ class Event(BaseModel, Base):
         res = super(Event, self).to_dict()
         if anotate and 'venue_id' in anotate:
             res.update({'venue_id': storage.get(Venue, self.venue_id).to_dict()})
+        if anotate and 'tracks' in anotate:
+            res.update({'tracks': [track.to_dict() for track in self.tracks]})
         return res

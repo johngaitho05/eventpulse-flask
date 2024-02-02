@@ -1,4 +1,4 @@
-retrieves a list of all users.
+Returns a list of all users from a given country
 ---
 tags:
   - Users

@@ -13,7 +13,6 @@ def get_countries():
     Retrieves all country objects
     """
     all_countries = storage.all(Country).values()
-    print("countries", [country.id for country in all_countries])
     return jsonify([country.to_dict() for country in all_countries])
 
 

@@ -1,4 +1,4 @@
-retrieves a specific user.
+Returns details of a specific user.
 ---
 tags:
   - Users

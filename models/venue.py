@@ -13,8 +13,8 @@ class Venue(BaseModel, Base):
     __tablename__ = 'venues'
 
     name = Column(String(1028), nullable=False)
+    address = Column(String(1028), nullable=False)
     country_id = Column(String(60), ForeignKey('countries.id'), nullable=False)
-    address = Column(Text, nullable=False)
 
     def to_dict(self, anotate=None):
         """Attach ManyToOne records"""
