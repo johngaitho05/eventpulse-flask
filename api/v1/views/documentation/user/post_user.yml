@@ -3,7 +3,7 @@ Creates a new user
 tags:
   - Users
 parameters:
-  - name: Body
+  - name: data
     in: body
     required: true
     schema:
@@ -11,22 +11,27 @@ parameters:
           name:
             type: string
             description: The user's name.
+            required: true
             example: "John Doe"
           email:
             type: string
             description: The user's email.
+            required: true
             example: "johndoe@mail.com"
           password:
             type: string
             description: The user's password.
+            required: true
             example: "my_password"
           phone:
             type: string
             description: The user's phone number.
+            required: true
             example: "+996736058376"
           country_id:
             type: string
             description: id of the user's country.
+            required: true
             example: "ff97c7e1-f42d-4e0e-953a-28d038e39c86"
 
 responses:

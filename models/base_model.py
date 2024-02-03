@@ -23,28 +23,24 @@ class BaseModel:
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
+    m2x = {}
+
     @staticmethod
-    def _refined_kwargs(kwargs):
+    def _refined_kwargs(kwargs, create=False):
         """Format the parameters for use when creating or updating a record"""
-        special_keys = ['__class__', '_sa_instance_stat']
-        kwargs = {k: v for k, v in kwargs.items() if k not in special_keys}
+        to_ignore = ['id', 'created_at', 'updated_at', '__class__', '_sa_instance_state']
+        kwargs = {k: v for k, v in kwargs.items() if k not in to_ignore}
         if 'password' in kwargs:
             kwargs['password'] = hashlib.md5(kwargs['password'].encode('utf-8')).hexdigest().lower()
-        if not kwargs.get('id'):
+        if create:
             kwargs['id'] = str(uuid.uuid4())
-        if not kwargs.get('created_at'):
             kwargs['created_at'] = datetime.utcnow()
-        if not kwargs.get('updated_at'):
             kwargs['updated_at'] = datetime.utcnow()
-        if type(kwargs['created_at']) is str:
-            kwargs['created_at'] = datetime.strptime(kwargs["created_at"], DATETIME_FORMAT)
-        if type(kwargs['updated_at']) is str:
-            kwargs['updated_at'] = datetime.strptime(kwargs["updated_at"], DATETIME_FORMAT)
         return kwargs
 
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
-        kwargs = self._refined_kwargs(kwargs)
+        kwargs = self._refined_kwargs(kwargs, create=True)
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -59,9 +55,16 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-    def to_dict(self, anotate=None):
+    def to_dict(self, anotate=[]):
         """returns a dictionary containing all keys/values of the instance"""
-        special_keys = ['_sa_instance_state', '__class__', 'password']
+        from models.event import Event
+        from models.country import Country
+        from models.user import User
+        from models.event_track import EventTrack
+        from models.venue import Venue
+
+        m2x_keys = list(self.m2x.keys())
+        special_keys = ['_sa_instance_state', '__class__', 'password'] + m2x_keys
         res = self.__dict__.copy()
         for k, v in res.items():
             if type(res[k]) is datetime:
@@ -69,7 +72,18 @@ class BaseModel:
             elif type(res[k]) is date:
                 res[k] = res[k].strftime(DATE_FORMAT)
 
-        return {k: v for k, v in res.items() if k not in special_keys}
+        res = {k: v for k, v in res.items() if k not in special_keys}
+        for k in anotate:
+            if k in m2x_keys:
+                val = getattr(self, k)
+                if type(val) is str:
+                    model = eval(self.m2x[k])
+                    record = models.storage.get(model, val)
+                    res[k] = record.to_dict()
+                else:
+                    res[k] = [record.to_dict() for record in val]
+
+        return res
 
     def delete(self):
         """delete the current instance from the storage"""
@@ -77,8 +91,7 @@ class BaseModel:
 
     def update(self, kwargs):
         """Update the current record"""
-        to_ignore = ['id', 'created_at', 'updated_at']
-        kwargs = self._refined_kwargs({k: v for k, v in kwargs.items() if k not in to_ignore})
+        kwargs = self._refined_kwargs(kwargs)
         for k, v in kwargs:
             setattr(self, k, v)
         self.save()

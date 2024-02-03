@@ -45,7 +45,7 @@ def get_event(event_id):
     if not event:
         abort(404)
 
-    return make_response(jsonify(event.to_dict(anotate=['user_id', 'venue_id', 'tracks'])), 200)
+    return make_response(jsonify(event.to_dict(anotate=['user_id', 'venue_id', 'tracks', 'attendees'])), 200)
 
 
 @app_views.route('/events/<event_id>', methods=['DELETE'],

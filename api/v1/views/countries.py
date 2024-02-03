@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ objects that handle all default RestFul API actions for Countries """
+from flasgger import swag_from
 from flask import abort, jsonify, make_response, request
 
 from api.v1.views import app_views
@@ -8,6 +9,7 @@ from models.country import Country
 
 
 @app_views.route('/countries', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/country/all_countries.yml', methods=['GET'])
 def get_countries():
     """
     Retrieves all country objects
@@ -17,6 +19,7 @@ def get_countries():
 
 
 @app_views.route('/countries/<country_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/country/get_country.yml', methods=['GET'])
 def get_country(country_id):
     """ Retrieves a single country """
     country = storage.get(Country, country_id)
@@ -28,6 +31,7 @@ def get_country(country_id):
 
 @app_views.route('/countries/<country_id>', methods=['DELETE'],
                  strict_slashes=False)
+@swag_from('documentation/country/delete_country.yml', methods=['DELETE'])
 def delete_country(country_id):
     """
     Deletes a country Object
@@ -45,6 +49,7 @@ def delete_country(country_id):
 
 
 @app_views.route('/countries', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/country/post_country.yml', methods=['POST'])
 def post_country():
     """
     Creates a country
@@ -66,6 +71,7 @@ def post_country():
 
 
 @app_views.route('/countries/<country_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/country/put_country.yml', methods=['PUT'])
 def put_country(country_id):
     """
     Updates a country

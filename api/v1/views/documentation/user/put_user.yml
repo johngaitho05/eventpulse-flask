@@ -8,9 +8,31 @@ parameters:
     type: string
     required: true
     description: The id of the user to update
-  - name: update_request
+  - name: data
     in: body
     required: true
+    schema:
+      properties:
+        name:
+          type: string
+          description: The user's name.
+          required: false
+          example: "John Doe"
+        password:
+          type: string
+          description: The user's password.
+          required: false
+          example: "my_password"
+        phone:
+          type: string
+          description: The user's phone number.
+          required: false
+          example: "+996736058376"
+        country_id:
+          type: string
+          description: id of the user's country.
+          required: false
+          example: "ff97c7e1-f42d-4e0e-953a-28d038e39c86"
 
 responses:
   404:

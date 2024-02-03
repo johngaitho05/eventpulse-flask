@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ objects that handle all default RestFul API actions for Venues """
+from flasgger import swag_from
 from flask import abort, jsonify, make_response, request
 
 from api.v1.views import app_views
@@ -8,6 +9,7 @@ from models.venue import Venue
 
 
 @app_views.route('/venues', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/venue/all_venues.yml', methods=['GET'])
 def get_venues():
     """
     Retrieves all venue objects
@@ -17,6 +19,7 @@ def get_venues():
 
 
 @app_views.route('countries/<country_id>/venues', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/venue/get_venue.yml', methods=['GET'])
 def get_venues_by_country(country_id):
     """
     Retrieves all venue objects
@@ -26,6 +29,7 @@ def get_venues_by_country(country_id):
 
 
 @app_views.route('/venues/<venue_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/venue/get_venue.yml', methods=['GET'])
 def get_venue(venue_id):
     """ Retrieves a single venue """
     venue = storage.get(Venue, venue_id)
@@ -61,7 +65,7 @@ def post_venue():
     data = request.get_json()
     if type(data) is not dict:
         abort(400, description="Not a JSON")
-    required = ['name', 'room_id', 'address']
+    required = ['name', 'address', 'country_id']
     for key in required:
         if key not in data:
             abort(400, description="Missing {} parameter".format(key))
