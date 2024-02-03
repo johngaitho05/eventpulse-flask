@@ -15,11 +15,11 @@ class EventTrack(BaseModel, Base):
     __tablename__ = "event_tracks"
 
     title = Column(String(1024), nullable=False)
-    event_id = Column(String(60), ForeignKey('events.id'), nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=True)
     room = Column(String(128), nullable=True)
     start_date = Column(DateTime, nullable=False)
     duration = Column(Float, nullable=True)
+    event_id = Column(String(60), ForeignKey('events.id'), nullable=False)
+    user_id = Column(String(60), ForeignKey('users.id'), nullable=True)
 
     def to_dict(self, anotate=None):
         """Attach ManyToOne records"""

@@ -15,7 +15,6 @@ def get_users():
     Retrieves the list of all user objects
     """
     all_users = storage.all(User).values()
-    print([user.id for user in all_users])
     return jsonify([user.to_dict(anotate=['country_id']) for user in all_users])
 
 
