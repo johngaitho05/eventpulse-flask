@@ -13,7 +13,7 @@ def get_venues():
     Retrieves all venue objects
     """
     all_venues = storage.all(Venue).values()
-    return jsonify([venue.to_dict(anotate=['country_id']) for venue in all_venues])
+    return make_response(jsonify([venue.to_dict(anotate=['country_id']) for venue in all_venues]), 200)
 
 
 @app_views.route('countries/<country_id>/venues', methods=['GET'], strict_slashes=False)
@@ -22,7 +22,7 @@ def get_venues_by_country(country_id):
     Retrieves all venue objects
     """
     all_venues = storage.filter(Venue, country_id=country_id).values()
-    return jsonify([venue.to_dict() for venue in all_venues])
+    return make_response(jsonify([venue.to_dict() for venue in all_venues]), 200)
 
 
 @app_views.route('/venues/<venue_id>', methods=['GET'], strict_slashes=False)
@@ -32,7 +32,7 @@ def get_venue(venue_id):
     if not venue:
         abort(404)
 
-    return jsonify(venue.to_dict(anotate=['country_id']))
+    return make_response(jsonify(venue.to_dict(anotate=['country_id'])), 200)
 
 
 @app_views.route('/venues/<venue_id>', methods=['DELETE'],

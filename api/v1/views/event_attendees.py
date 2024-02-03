@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-""" objects that handle all default RestFul API actions for Events """
-from flask import abort, jsonify
+""" objects that handle all default RestFul API actions for Event Attendees"""
+from flask import abort, jsonify, make_response
 
 from api.v1.views import app_views
 from models import storage
@@ -16,7 +16,7 @@ def get_event_attendees(event_id):
     event = storage.get(Event, event_id)
     if not event:
         abort(404)
-    return jsonify([user.to_dict() for user in event.attendees])
+    return make_response(jsonify([user.to_dict() for user in event.attendees]), 200)
 
 
 @app_views.route('events/<event_id>/users/<user_id>', methods=['POST'], strict_slashes=False)
@@ -31,7 +31,7 @@ def post_attendee(event_id, user_id):
     if user not in event.attedees:
         event.attendees.append(user)
         event.save()
-    return jsonify(user.to_dict()), 201
+    return make_response(jsonify(user.to_dict()), 201)
 
 
 @app_views.route('events/<event_id>/users/<user_id>', methods=['DELETE'], strict_slashes=False)
@@ -46,4 +46,4 @@ def delete_attendee(event_id, user_id):
     if user in event.attendees:
         event.attendees.remove(user)
         event.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)

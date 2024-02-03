@@ -15,7 +15,7 @@ def get_events():
     Retrieves all event objects
     """
     all_events = storage.all(Event).values()
-    return jsonify([event.to_dict(anotate=['user_id', 'venue_id']) for event in all_events])
+    return make_response(jsonify([event.to_dict(anotate=['user_id', 'venue_id']) for event in all_events]), 200)
 
 
 @app_views.route('venues/<venue_id>/events', methods=['GET'], strict_slashes=False)
@@ -25,7 +25,7 @@ def get_events_by_venue(venue_id):
     """
 
     all_events = storage.filter(Event, venue_id=venue_id).values()
-    return jsonify([event.to_dict(anotate=['user_id']) for event in all_events])
+    return make_response(jsonify([event.to_dict(anotate=['user_id']) for event in all_events]), 200)
 
 
 @app_views.route('countries/<country_id>/events', methods=['GET'], strict_slashes=False)
@@ -45,7 +45,7 @@ def get_event(event_id):
     if not event:
         abort(404)
 
-    return jsonify(event.to_dict(anotate=['user_id', 'venue_id', 'tracks']))
+    return make_response(jsonify(event.to_dict(anotate=['user_id', 'venue_id', 'tracks'])), 200)
 
 
 @app_views.route('/events/<event_id>', methods=['DELETE'],

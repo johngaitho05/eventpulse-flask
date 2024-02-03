@@ -13,7 +13,7 @@ def get_countries():
     Retrieves all country objects
     """
     all_countries = storage.all(Country).values()
-    return jsonify([country.to_dict() for country in all_countries])
+    return make_response(jsonify([country.to_dict() for country in all_countries]), 200)
 
 
 @app_views.route('/countries/<country_id>', methods=['GET'], strict_slashes=False)
@@ -23,7 +23,7 @@ def get_country(country_id):
     if not country:
         abort(404)
 
-    return jsonify(country.to_dict())
+    return make_response(jsonify(country.to_dict()), 200)
 
 
 @app_views.route('/countries/<country_id>', methods=['DELETE'],

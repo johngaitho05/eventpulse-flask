@@ -22,7 +22,7 @@ def get_event_tracks_by_event(event_id):
     Retrieves all event_track objects
     """
     all_event_tracks = storage.filter(EventTrack, event_id=event_id).values()
-    return jsonify([event_track.to_dict() for event_track in all_event_tracks])
+    return make_response(jsonify([event_track.to_dict() for event_track in all_event_tracks]), 200)
 
 
 @app_views.route('/event_tracks/<event_track_id>', methods=['GET'], strict_slashes=False)
@@ -32,7 +32,7 @@ def get_event_track(event_track_id):
     if not event_track:
         abort(404)
 
-    return jsonify(event_track.to_dict(anotate=['event_id']))
+    return make_response(jsonify(event_track.to_dict(anotate=['event_id'])), 200)
 
 
 @app_views.route('/event_tracks/<event_track_id>', methods=['DELETE'],
