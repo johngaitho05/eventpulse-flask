@@ -16,7 +16,7 @@ class EventTrack(BaseModel, Base):
 
     title = Column(String(1024), nullable=False)
     event_id = Column(String(60), ForeignKey('events.id'), nullable=False)
-    responsible = Column(String(60), ForeignKey('users.id'), nullable=True)
+    user_id = Column(String(60), ForeignKey('users.id'), nullable=True)
     room = Column(String(128), nullable=True)
     start_date = Column(DateTime, nullable=False)
     duration = Column(Float, nullable=True)

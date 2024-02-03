@@ -24,11 +24,11 @@ class Event(BaseModel, Base):
 
     title = Column(String(1024), nullable=False)
     description = Column(Text, nullable=False)
-    venue_id = Column(String(60), ForeignKey('venues.id'), nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
     banner_url = Column(String(2048), nullable=False)
+    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+    venue_id = Column(String(60), ForeignKey('venues.id'), nullable=False)
     attendees = relationship("User", secondary=event_attendees, viewonly=False)
     tracks = relationship("EventTrack", backref="event", cascade="all, delete, delete-orphan")
 

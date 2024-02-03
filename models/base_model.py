@@ -11,8 +11,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 import models
 
-DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
-DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 Base = declarative_base()
 

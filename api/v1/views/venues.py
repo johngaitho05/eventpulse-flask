@@ -13,6 +13,7 @@ def get_venues():
     Retrieves all venue objects
     """
     all_venues = storage.all(Venue).values()
+    print([venue.id for venue in all_venues])
     return jsonify([venue.to_dict(anotate=['country_id']) for venue in all_venues])
 
 
