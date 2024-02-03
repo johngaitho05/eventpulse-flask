@@ -5,6 +5,7 @@ from flask import abort, jsonify, make_response, request
 
 from api.v1.views import app_views
 from models import storage
+from models.event import Event
 from models.user import User
 
 
@@ -20,12 +21,24 @@ def get_users():
 
 @app_views.route('countries/<country_id>/users', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/user/country_users.yml', methods=['GET'])
-def get_country_users(country_id):
+def get_event_attendees(country_id):
     """
     Retrieves the list of all user objects
     """
     users = storage.filter(User, country_id=country_id).values()
     return jsonify([user.to_dict() for user in users])
+
+
+@app_views.route('events/<event_id>/users', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/country_users.yml', methods=['GET'])
+def get_country_users(event_id):
+    """
+    Retrieves all event attendees
+    """
+    event = storage.get(Event, event_id)
+    if not event:
+        abort(404)
+    return jsonify([user.to_dict() for user in event.attendees])
 
 
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)

@@ -15,7 +15,6 @@ def get_events():
     Retrieves all event objects
     """
     all_events = storage.all(Event).values()
-    print([(event.id, event.start_date.strftime('%Y-%m-%d %H:%M:%S')) for event in all_events])
     return jsonify([event.to_dict(anotate=['user_id', 'venue_id']) for event in all_events])
 
 
