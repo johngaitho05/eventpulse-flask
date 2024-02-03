@@ -107,3 +107,4 @@ def put_event(event_id):
 
     event.update(**data)
     return make_response(jsonify(event.to_dict(anotate=['venue_id'])), 200)
+
