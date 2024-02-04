@@ -22,11 +22,11 @@ responses:
         created_at:
           type: string
           description: time of creation of the venue
-          example: 2024-02-02 11:39:05
+          example: "2024-02-02 11:39:05"
         updated_at:
           type: string
           description: time of last update of the venue
-          example: 2024-02-02 11:39:05
+          example: "2024-02-02 11:39:05"
         name:
           type: string
           description: name of the venue

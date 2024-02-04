@@ -10,6 +10,7 @@ from cloudinary.uploader import upload
 
 
 @app_views.route('/events', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/event/all_events.yml', methods=['GET'])
 def get_events():
     """
     Retrieves all event objects
@@ -19,6 +20,7 @@ def get_events():
 
 
 @app_views.route('venues/<venue_id>/events', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/event/venue_events.yml', methods=['GET'])
 def get_events_by_venue(venue_id):
     """
     Retrieves all event objects from a given country
@@ -29,6 +31,7 @@ def get_events_by_venue(venue_id):
 
 
 @app_views.route('countries/<country_id>/events', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/event/country_events.yml', methods=['GET'])
 def get_events_by_country(country_id):
     """
     Retrieves all event objects from a given country
@@ -39,6 +42,7 @@ def get_events_by_country(country_id):
 
 
 @app_views.route('/events/<event_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/event/get_event.yml', methods=['GET'])
 def get_event(event_id):
     """ Retrieves a single event """
     event = storage.get(Event, event_id)
@@ -50,6 +54,7 @@ def get_event(event_id):
 
 @app_views.route('/events/<event_id>', methods=['DELETE'],
                  strict_slashes=False)
+@swag_from('documentation/event/delete_event.yml', methods=['DELETE'])
 def delete_event(event_id):
     """
     Deletes a event Object
@@ -67,6 +72,7 @@ def delete_event(event_id):
 
 
 @app_views.route('/events', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/event/post_event.yml', methods=['POST'])
 def post_event():
     """
     Creates an event
@@ -87,10 +93,11 @@ def post_event():
             abort(400, description="Missing {} parameter".format(key))
     instance = Event(**data)
     instance.save()
-    return make_response(jsonify(instance.to_dict(anotate=['venue_id'])), 201)
+    return make_response(jsonify(instance.to_dict(anotate=['user_id', 'venue_id'])), 201)
 
 
 @app_views.route('/events/<event_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/event/put_event.yml', methods=['PUT'])
 def put_event(event_id):
     """
     Updates an event
@@ -107,4 +114,3 @@ def put_event(event_id):
 
     event.update(**data)
     return make_response(jsonify(event.to_dict(anotate=['venue_id'])), 200)
-
