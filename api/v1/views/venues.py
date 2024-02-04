@@ -19,7 +19,7 @@ def get_venues():
 
 
 @app_views.route('countries/<country_id>/venues', methods=['GET'], strict_slashes=False)
-@swag_from('documentation/venue/get_venue.yml', methods=['GET'])
+@swag_from('documentation/venue/country_venues.yml', methods=['GET'])
 def get_venues_by_country(country_id):
     """
     Retrieves all venue objects
@@ -41,6 +41,7 @@ def get_venue(venue_id):
 
 @app_views.route('/venues/<venue_id>', methods=['DELETE'],
                  strict_slashes=False)
+@swag_from('documentation/venue/delete_venue.yml', methods=['DELETE'])
 def delete_venue(venue_id):
     """
     Deletes a venue Object
@@ -58,6 +59,7 @@ def delete_venue(venue_id):
 
 
 @app_views.route('/venues', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/venue/post_venue.yml', methods=['POST'])
 def post_venue():
     """
     Creates a venue
@@ -76,6 +78,7 @@ def post_venue():
 
 
 @app_views.route('/venues/<venue_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/venue/put_venue.yml', methods=['PUT'])
 def put_venue(venue_id):
     """
     Updates a venue
