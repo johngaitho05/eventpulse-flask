@@ -95,3 +95,4 @@ responses:
         banner_url:
           type: string
           description: The event banner(image)
+          example: "https://res.cloudinary.com/da3jmmlpj/image/upload/v1706916310/safespace_enlson.jpg"

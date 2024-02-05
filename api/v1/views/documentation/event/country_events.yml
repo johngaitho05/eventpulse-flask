@@ -51,3 +51,7 @@ responses:
             type: object
             description: the place where the event will take place
             example: {"created_at":"2024-02-02 14:46:40","id":"01ed5701-595d-4a62-a75b-42826a605e91","name":"Empire State Convention Center","updated_at":"2024-02-02 14:46:40"}
+          banner_url:
+            type: string
+            description: The event banner(image)
+            example: "https://res.cloudinary.com/da3jmmlpj/image/upload/v1706916310/safespace_enlson.jpg"

@@ -47,3 +47,7 @@ responses:
             type: object
             description: the owner of the event (the event organizer)
             example: {"created_at":"2024-02-02 12:39:46","email":"austinlewis@example.net","id":"9544126b-b902-48b4-92a7-47d20f232cef","name":"Matthew Schultz","phone":"+1-754-235-3735","updated_at":"2024-02-02 12:39:46"}
+          banner_url:
+            type: string
+            description: The event banner(image)
+            example: "https://res.cloudinary.com/da3jmmlpj/image/upload/v1706916310/safespace_enlson.jpg"
