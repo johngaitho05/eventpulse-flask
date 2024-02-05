@@ -1,4 +1,4 @@
-Returns a list of attendees of an event
+Returns a list of all attendees of an event
 ---
 tags:
   - Event Attendees
