@@ -12,7 +12,7 @@ parameters:
             type: string
             description: The country's name.
             required: true
-            example: "Nigeria"
+            example: "Kenya"
 
 responses:
   400:
