@@ -30,6 +30,8 @@ class User(BaseModel, Base):
         - `False` if `password` is `None`
         - Compare `password` and the MD5 value of `pwd`
         """
+        if not self.active:
+            return False
         if pwd is None or type(pwd) is not str:
             return False
         if self.password is None:
