@@ -1,18 +1,13 @@
-Creates a new user
+Authenticates and returns user with the given credentials
 ---
 tags:
-  - Users
+  - Authentication
 parameters:
   - name: data
     in: body
     required: true
     schema:
         properties:
-          name:
-            type: string
-            description: The user's name.
-            required: true
-            example: "John Doe"
           email:
             type: string
             description: The user's email.
@@ -23,23 +18,14 @@ parameters:
             description: The user's password.
             required: true
             example: "my_password"
-          phone:
-            type: string
-            description: The user's phone number.
-            required: true
-            example: "+996736058376"
-          country_id:
-            type: string
-            description: id of the user's country.
-            required: true
-            example: "ff97c7e1-f42d-4e0e-953a-28d038e39c86"
 
 responses:
   400:
-    description: Not a JSON or a user with the given email already exist or a required parameter is missing
-
-  201:
-    description: successfully created user
+    description: Not a valid JSON | email or password is missing
+  401:
+    description: Invalid credentials
+  200:
+    description: User successfully authenticated
     schema:
       properties:
         created_at:

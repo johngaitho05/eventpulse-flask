@@ -101,3 +101,27 @@ def put_user(user_id):
 
     user.update(**data)
     return make_response(jsonify(user.to_dict(anotate=['country_id'])), 200)
+
+
+@app_views.route('/login', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/user/authenticate_user.yml', methods=['POST'])
+def authenticate_user():
+    """
+    Updates a user
+    """
+    data = request.get_json()
+    if type(data) is not dict:
+        abort(400, description="Not a JSON")
+    required_keys = ['email', 'password']
+    for k in required_keys:
+        if k not in data:
+            abort(400, description="Missing {}".format(k))
+    users = list(storage.filter(User, email=data.get('email')).values())
+    if not users:
+        abort(401, description="Invalid credentials")
+    user = users[0]
+
+    if not user.authenticate(data.get('password')):
+        abort(401, description="Invalid credentials")
+
+    return make_response(jsonify(user.to_dict(anotate=['country_id'])), 200)
