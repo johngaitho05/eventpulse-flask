@@ -71,7 +71,7 @@ class DBStorage:
                 obj = obj.to_dict(anotate=[x])
                 if obj[x][y] == v:
                     return True
-            elif obj.to_dict()[k] == v:
+            elif obj.to_dict(anotate=[k])[k] == v:
                 return True
         return False
 

@@ -22,7 +22,7 @@ def get_event_tracks_by_event(event_id):
 @swag_from('documentation/event_track/post_track.yml', methods=['POST'])
 def post_event_track(event_id):
     """
-    Creates a event_track
+    Creates an event_track
     """
     event = storage.get(Event, event_id)
     if not event:

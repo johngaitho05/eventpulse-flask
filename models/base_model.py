@@ -79,9 +79,9 @@ class BaseModel:
                 if type(val) is str:
                     model = eval(self.m2x[k])
                     record = models.storage.get(model, val)
-                    res[k] = record.to_dict()
+                    res[k] = record.to_dict(anotate=[k for k, v in record.m2x.items() if self.__class__.__name__ != v])
                 else:
-                    res[k] = [record.to_dict() for record in val]
+                    res[k] = [record.to_dict(anotate=[k for k, v in record.m2x.items() if self.__class__.__name__ != v]) for record in val]
 
         return res
 
