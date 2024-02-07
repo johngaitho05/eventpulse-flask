@@ -29,13 +29,13 @@ def post_event_track(event_id):
         abort(404)
     data = request.get_json()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     data.update({'event_id': event_id})
     required = ['title', 'event_id', 'start_date']
     for key in required:
         if key not in data:
-            abort(400, description="Missing {} parameter".format(key))
+            return make_response(jsonify({'error': "Missing {} parameter".format(key)}), 400)
 
     instance = EventTrack(**data)
     instance.save()
@@ -74,7 +74,7 @@ def put_event_track(event_track_id):
     data = request.get_json()
 
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     event_track.update(**data)
     return make_response(jsonify(event_track.to_dict()), 200)

@@ -66,15 +66,15 @@ def post_user():
     """
     data = request.get_json()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     required_keys = ['email', 'password', 'phone', 'country_id']
     for k in required_keys:
         if k not in data:
-            abort(400, description="Missing {}".format(k))
+            return make_response(jsonify({'error': "Missing {}".format(k)}), 400)
     user = storage.filter(User, email=data.get('email'))
     if user:
-        abort(400, description="A user with the given email already exist")
+        return make_response(jsonify({'error': "A user with the given email already exist"}), 400)
 
     instance = User(**data)
     instance.save()
@@ -94,7 +94,7 @@ def put_user(user_id):
 
     data = request.get_json()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     if 'email' in data:
         del data['email']
@@ -111,17 +111,17 @@ def authenticate_user():
     """
     data = request.get_json()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
     required_keys = ['email', 'password']
     for k in required_keys:
         if k not in data:
-            abort(400, description="Missing {}".format(k))
+            return make_response(jsonify({'error': 'Missing {}'.format(k)}), 401)
     users = list(storage.filter(User, email=data.get('email')).values())
     if not users:
-        abort(401, description="Invalid credentials")
+        return make_response(jsonify({'error': 'Invalid credentials'}), 401)
     user = users[0]
 
     if not user.authenticate(data.get('password')):
-        abort(401, description="Invalid credentials")
+        return make_response(jsonify({'error': 'Invalid credentials'}), 401)
 
     return make_response(jsonify(user.to_dict(anotate=['country_id'])), 200)

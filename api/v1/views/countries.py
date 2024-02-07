@@ -56,14 +56,14 @@ def post_country():
     """
     data = request.get_json()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     if 'name' not in data:
-        abort(400, description="Missing name parameter")
+        return make_response(jsonify({'error': 'Missing name parameter'}), 400)
 
     country = storage.filter(Country, name=data.get('name'))
     if country:
-        abort(400, description="A country with the given name already exist")
+        return make_response(jsonify({'error': 'A country with the given name already exist'}), 400)
 
     instance = Country(**data)
     instance.save()
@@ -84,7 +84,7 @@ def put_country(country_id):
     data = request.get_json()
 
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     country.update(**data)
     return make_response(jsonify(country.to_dict()), 200)

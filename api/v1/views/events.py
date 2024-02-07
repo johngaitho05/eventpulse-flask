@@ -79,7 +79,7 @@ def post_event():
     """
     data = request.form.to_dict()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
     required = ['title', 'venue_id', 'start_date', 'end_date', 'description', 'banner_url']
     to_ignore = ['attendees', 'tracks', 'banner_url']
     for key in to_ignore:
@@ -90,7 +90,7 @@ def post_event():
     data['banner_url'] = result['secure_url']
     for key in required:
         if key not in data:
-            abort(400, description="Missing {} parameter".format(key))
+            return make_response(jsonify({'error': 'Missing {} parameter'.format(key)}), 400)
     instance = Event(**data)
     instance.save()
     return make_response(jsonify(instance.to_dict(anotate=['user_id', 'venue_id'])), 201)
@@ -110,7 +110,7 @@ def put_event(event_id):
     data = request.get_json()
 
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     event.update(**data)
     return make_response(jsonify(event.to_dict(anotate=['venue_id'])), 200)

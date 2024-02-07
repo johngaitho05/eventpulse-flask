@@ -66,11 +66,11 @@ def post_venue():
     """
     data = request.get_json()
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
     required = ['name', 'address', 'country_id']
     for key in required:
         if key not in data:
-            abort(400, description="Missing {} parameter".format(key))
+            return make_response(jsonify({'error': "Missing {} parameter".format(key)}), 400)
 
     instance = Venue(**data)
     instance.save()
@@ -91,7 +91,7 @@ def put_venue(venue_id):
     data = request.get_json()
 
     if type(data) is not dict:
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
     venue.update(**data)
     return make_response(jsonify(venue.to_dict()), 200)
