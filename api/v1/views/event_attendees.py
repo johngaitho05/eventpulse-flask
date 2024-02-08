@@ -31,7 +31,7 @@ def post_attendee(event_id, user_id):
     user = storage.get(User, user_id)
     if not event or not user:
         abort(404)
-    if user not in event.attedees:
+    if user not in event.attendees:
         event.attendees.append(user)
         event.save()
     return make_response(jsonify(user.to_dict(anotate=['country_id'])), 201)
