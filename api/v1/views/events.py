@@ -107,10 +107,16 @@ def put_event(event_id):
     if not event:
         abort(404)
 
-    data = request.get_json()
-
+    data = request.form.to_dict()
     if type(data) is not dict:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-
-    event.update(**data)
-    return make_response(jsonify(event.to_dict(anotate=['venue_id'])), 200)
+    to_ignore = ['attendees', 'tracks', 'banner_url', 'user_id']
+    for key in to_ignore:
+        if key in data:
+            del data[key]
+    image_file = request.files.get('banner')
+    if image_file:
+        result = upload(image_file)
+        data['banner_url'] = result['secure_url']
+    event.update(data)
+    return make_response(jsonify(event.to_dict(anotate=['user_id', 'venue_id'])), 201)

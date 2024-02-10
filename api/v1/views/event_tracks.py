@@ -76,5 +76,5 @@ def put_event_track(event_track_id):
     if type(data) is not dict:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
-    event_track.update(**data)
+    event_track.update(data)
     return make_response(jsonify(event_track.to_dict()), 200)

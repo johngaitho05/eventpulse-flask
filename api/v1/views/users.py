@@ -99,7 +99,7 @@ def put_user(user_id):
     if 'email' in data:
         del data['email']
 
-    user.update(**data)
+    user.update(data)
     return make_response(jsonify(user.to_dict(anotate=['country_id'])), 200)
 
 

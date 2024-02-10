@@ -93,5 +93,5 @@ def put_venue(venue_id):
     if type(data) is not dict:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
-    venue.update(**data)
+    venue.update(data)
     return make_response(jsonify(venue.to_dict()), 200)

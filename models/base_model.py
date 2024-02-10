@@ -92,6 +92,6 @@ class BaseModel:
     def update(self, kwargs):
         """Update the current record"""
         kwargs = self._refined_kwargs(kwargs)
-        for k, v in kwargs:
+        for k, v in kwargs.items():
             setattr(self, k, v)
         self.save()

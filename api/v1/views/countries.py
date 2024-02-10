@@ -86,5 +86,5 @@ def put_country(country_id):
     if type(data) is not dict:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
-    country.update(**data)
+    country.update(data)
     return make_response(jsonify(country.to_dict()), 200)
