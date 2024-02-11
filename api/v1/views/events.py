@@ -16,7 +16,7 @@ def get_events():
     Retrieves all event objects
     """
     all_events = storage.all(Event).values()
-    return make_response(jsonify([event.to_dict(anotate=['user_id', 'venue_id']) for event in all_events]), 200)
+    return make_response(jsonify([event.to_dict(anotate=['user_id', 'venue_id', 'attendees']) for event in all_events]), 200)
 
 
 @app_views.route('venues/<venue_id>/events', methods=['GET'], strict_slashes=False)
