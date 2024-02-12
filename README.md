@@ -11,8 +11,18 @@ For endpoints and supported methods, check out the documentation: [https://event
 
 ![Photo](static/eventpulse.png)
 
-### Setting Up
+## Installation steps
 
+### Prerequisites
+- MySQL version 5.7.*
+- A [cloudinary](https://cloudinary.com/) account
+
+### Setting up the database
+```shell
+cat setup_mysql_dev.sql | -uroot -p
+```
+
+### Setting up the project
 ```shell
 git clone git@github.com:johngaitho05/eventpulse-flask.git
 cd eventpulse-flask
