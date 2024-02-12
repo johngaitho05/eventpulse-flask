@@ -14,7 +14,7 @@ For endpoints and supported methods, check out the documentation: [https://event
 ### Setting Up
 
 ```shell
-git git@github.com:johngaitho05/eventpulse-flask.git
+git clone git@github.com:johngaitho05/eventpulse-flask.git
 cd eventpulse-flask
 pip install -r requirements.txt
 python -m api.v1.app
