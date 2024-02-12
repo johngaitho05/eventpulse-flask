@@ -11,7 +11,7 @@ For endpoints and supported methods, check out the documentation: [https://event
 
 ![Photo](static/eventpulse.png)
 
-## Installation steps
+## Installation
 
 ### Prerequisites
 - MySQL version 5.7.*
