@@ -7,7 +7,7 @@ The API provides data for the following records
 - Events
 - Venues
 
-For endpoints and supported methods, check out the documentation: [https://events.johngaitho.info/apidocs/](https://events.johngaitho.info/apidocs/)
+For endpoints and supported methods, check out the documentation: [https://events.johngaitho.info/api/v1/](https://events.johngaitho.info/api/v1)
 
 ![Photo](static/eventpulse.png)
 
