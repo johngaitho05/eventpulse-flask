@@ -26,9 +26,12 @@ For endpoints and supported methods, check out the documentation: [https://event
 - CLOUDINARY_SECRET - the application secret key
 
 #### Database Environment
-- EVENTPULSE_USER - eventpulse_dev
-- EVENTPULSE_PWD - eventpulse_dev_pwd
-- EVENTPULSE_HOST - localhost or the ip of your database server
+- EVENTPULSE_USER - The database user (eventpulse_dev)
+- EVENTPULSE_PWD - The password of the database user (eventpulse_dev_pwd)
+- EVENTPULSE_HOST - Ip address of the database server (localhost)
+
+#### Application environment
+EVENTPULSE_PORT - optional (defaults to 5000)
 
 ### Setting up the database
 ```shell
@@ -51,3 +54,5 @@ pip install -r requirements.txt
 ```shell
 python -m api.v1.app
 ```
+
+You can now access the application from http://localhost:5000
