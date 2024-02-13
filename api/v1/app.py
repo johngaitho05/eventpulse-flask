@@ -35,7 +35,6 @@ def not_found(error):
 app.config['SWAGGER'] = {
     'title': 'EventPulse API',
     'version': "1.0.0",
-    'specs_route': '/api/v1'
 }
 
 Swagger(app)
