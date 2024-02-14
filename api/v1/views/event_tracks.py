@@ -18,6 +18,21 @@ def get_event_tracks_by_event(event_id):
     return make_response(jsonify([event_track.to_dict(anotate=['user_id']) for event_track in all_event_tracks]), 200)
 
 
+@app_views.route('/event_tracks/<event_track_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/event_track/get_track.yml', methods=['GET'])
+def get_event_track(event_track_id):
+    """
+    Retrieves an event_track Object
+    """
+
+    event_track = storage.get(EventTrack, event_track_id)
+
+    if not event_track:
+        abort(404)
+
+    return make_response(jsonify(event_track.to_dict(anotate=['user_id', 'event_id'])), 200)
+
+
 @app_views.route('/events/<event_id>/event_tracks', methods=['POST'], strict_slashes=False)
 @swag_from('documentation/event_track/post_track.yml', methods=['POST'])
 def post_event_track(event_id):
@@ -64,8 +79,9 @@ def delete_event_track(event_track_id):
 @swag_from('documentation/event_track/put_track.yml', methods=['PUT'])
 def put_event_track(event_track_id):
     """
-    Updates a event_track
+    Updates an event_track
     """
+    print("updating")
     event_track = storage.get(EventTrack, event_track_id)
 
     if not event_track:
