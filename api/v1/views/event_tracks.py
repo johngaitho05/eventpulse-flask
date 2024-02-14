@@ -81,7 +81,6 @@ def put_event_track(event_track_id):
     """
     Updates an event_track
     """
-    print("updating")
     event_track = storage.get(EventTrack, event_track_id)
 
     if not event_track:
