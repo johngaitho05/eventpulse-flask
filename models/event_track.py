@@ -17,7 +17,7 @@ class EventTrack(BaseModel, Base):
     room = Column(String(128), nullable=True)
     start_date = Column(DateTime, nullable=False)
     duration = Column(Float, nullable=True)
-    event_id = Column(String(60), ForeignKey('events.id'), nullable=False)
+    event_id = Column(String(60), ForeignKey('events.id'), nullable=False, )
     user_id = Column(String(60), ForeignKey('users.id'), nullable=True)
 
     m2x = {'user_id': 'User', 'event_id': 'Event'}

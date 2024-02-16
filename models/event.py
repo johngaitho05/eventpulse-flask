@@ -28,7 +28,7 @@ class Event(BaseModel, Base):
     banner_url = Column(String(2048), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     venue_id = Column(String(60), ForeignKey('venues.id'), nullable=False)
-    attendees = relationship("User", secondary=event_attendees, viewonly=False, cascade="all, delete", )
+    attendees = relationship("User", secondary=event_attendees, viewonly=False, cascade="all, delete")
     tracks = relationship("EventTrack", backref="event", cascade="all, delete, delete-orphan")
 
     m2x = {'tracks': 'EventTrack', 'attendees': 'User', 'user_id': 'User', 'venue_id': 'Venue'}
