@@ -8,6 +8,7 @@ from flask_cors import CORS
 
 from api.v1.views import app_views
 from models import storage
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -37,6 +38,8 @@ app.config['SWAGGER'] = {
     'version': "1.0.0",
     'host': 'events.johngaitho.info'
 }
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
 Swagger(app)
 
